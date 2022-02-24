@@ -131,4 +131,31 @@ describe('Ao fazer um GET no caminho "/products/:id"', () => {
       expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
     });
   });
+
+  describe('quando não encontra o produto', () => {
+    const response = [];
+    const request = {};
+
+    before(() => {
+      request.body = {};
+      request.params = {id: 2};
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns();
+      sinon.stub(ProductsService, 'find').resolves([]);
+    });
+
+    after( async () => {
+      ProductsService.find.restore();
+    });
+
+    it('retorna status 404', async () => {
+      await ProductsController.find(request, response);
+      expect(response.status.calledWith(404)).to.be.equal(true);
+    });
+
+    it('retorna um array vazio', async () => {
+      await ProductsController.find(request, response);
+      expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
+    });
+  });
 });
