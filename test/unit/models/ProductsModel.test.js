@@ -2,7 +2,7 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const connection = require('../../../models/connection');
 const ProductsModel = require('../../../models/ProductsModel');
-const { products } = require('./mocks/StoreManagerMock');
+const { products } = require('../mocks/StoreManagerMock');
 
 describe('Acessando o caminho "/products" ...', () => {
   before( async () => {
