@@ -1,12 +1,12 @@
 const products = [
   {
     "id": 1,
-    "name": "Product A",
+    "name": "produto A",
     "quantity": 10,
   },
   {
     "id": 2,
-    "name": "Product B",
+    "name": "produto B",
     "quantity": 20,
   },
 ];
