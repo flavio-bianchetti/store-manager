@@ -1,6 +1,6 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
-const connection = require('../../../models/connection');
+const ProductsModel = require('../../../models/ProductsModel');
 const ProductsService = require('../../../services/ProductsService');
 const { products } = require('../mocks/StoreManagerMock');
 
@@ -25,11 +25,11 @@ const productItem = {
 
 describe('Acessando o caminho "/products"...', () => {
   before( async () => {
-    sinon.stub(connection, 'execute').resolves([products]);
+    sinon.stub(ProductsModel, 'getAll').resolves(products);
   });
 
   after( async () => {
-    connection.execute.restore();
+    ProductsModel.getAll.restore();
   });
 
   describe('renorna ...', () => {
@@ -55,11 +55,11 @@ describe('Acessando o caminho "/products"...', () => {
 describe('Acessando o caminho "/products/:id", ...', () => {
 
   before( async () => {
-    sinon.stub(connection, 'execute').resolves([products[0]]);
+    sinon.stub(ProductsModel, 'find').resolves(products[0]);
   });
 
   after( async () => {
-    connection.execute.restore();
+    ProductsModel.find.restore();
   });
 
   describe('renorna ...', () => {
