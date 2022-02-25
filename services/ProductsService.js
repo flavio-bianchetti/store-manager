@@ -27,8 +27,29 @@ const create = async ({ name, quantity }) => {
   return result;
 };
 
+const update = async ({ id, name, quantity }) => {
+  const findProductById = await find(id);
+  const findProductByName = await findByName(name);
+  console.log(findProductByName, findProductById);
+  if (!findProductById) return [];
+
+  if (findProductByName.length !== 0
+    && findProductByName[0].id !== Number(id)) return false;
+
+  const result = await ProductsModel.update({ id, name, quantity });
+
+  if (result.affectedRows === 0) return false;
+
+  return {
+    id,
+    name,
+    quantity,
+  };
+};
+
 module.exports = {
   getAll,
   find,
   create,
+  update,
 };
