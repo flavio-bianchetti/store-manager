@@ -18,9 +18,12 @@ const find = async (id) => {
 const create = async ({ name, quantity }) => {
   if (!name || !quantity) return false;
 
-  if (findByName(name).length === 0) return [];
+  const findProduct = await findByName(name);
+
+  if (findProduct.length !== 0) return [];
 
   const result = await ProductsModel.create({ name, quantity });
+
   return result;
 };
 
