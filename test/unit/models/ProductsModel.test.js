@@ -64,14 +64,4 @@ describe('Ao solicitar o cadastro de um novo produto,', () => {
       expect(response.insertId).to.be.equal(1);
     });
   });
-
-  describe('', () => {
-    it('', async () => {
-
-    });
-
-    it('', async () => {
-      
-    });
-  });
 });
