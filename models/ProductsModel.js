@@ -27,8 +27,17 @@ const create = async ({ name, quantity }) => {
   };
 };
 
+const findByName = async (name) => {
+  const [result] = await connection.execute(
+    'SELECT * FROM StoreManager.products WHERE name = ?;',
+    [name],
+  );
+  return result;
+};
+
 module.exports = {
   getAll,
   find,
   create,
+  findByName,
 };
