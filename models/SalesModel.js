@@ -28,7 +28,31 @@ const find = async (id) => {
   return result;
 };
 
+const create = async (arraySales) => {
+  const [result] = await connection.execute(
+    'INSERT INTO StoreManager.sales (date) VALUES (NOW());',
+  );
+
+  const saleId = result.insertId;
+
+  arraySales.forEach(async (sale) => {
+    await connection.execute(
+      'INSERT INTO StoreManager.sales_products '
+      + '(sale_id, product_id, quantity) VALUES (?, ?, ?);',
+      [saleId, sale.productId, sale.quantity],
+    );
+  });
+
+  return {
+    id: saleId,
+    itemsSold: [
+      ...arraySales,
+    ],
+  };
+};
+
 module.exports = {
   getAll,
   find,
+  create,
 };
