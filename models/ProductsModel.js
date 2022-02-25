@@ -19,8 +19,12 @@ const create = async (name, quantity) => {
     'INSERT INTO StoreManager.products (name, quantity) VALUES (?, ?);',
     [name, quantity],
   );
-  console.log(result);
-  return result;
+  
+  return {
+    id: result.insertId,
+    name,
+    quantity,
+  };
 };
 
 module.exports = {
