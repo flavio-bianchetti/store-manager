@@ -1,3 +1,5 @@
+const error500 = { message: 'Internal Server Error' };
+
 const ProductsService = require('../services/ProductsService');
 
 const getAll = async (_req, res) => {
@@ -6,7 +8,7 @@ const getAll = async (_req, res) => {
     return res.status(200).json(products);
   } catch (err) {
     console.error(err);
-    return res.status(500).send('Internal Server Error');
+    return res.status(500).json(error500);
   }
 };
 
@@ -21,7 +23,7 @@ const find = async (req, res) => {
     return res.status(200).json(product);
   } catch (err) {
     console.error(err);
-    return res.status(500).send('Internal Server Error');
+    return res.status(500).json(error500);
   }
 };
 
@@ -40,7 +42,7 @@ const create = async (req, res) => {
     return res.status(201).json(product);
   } catch (err) {
     console.error(err);
-    return res.status(500).send('Internal Server Error');
+    return res.status(500).json(error500);
   }
 };
 
@@ -61,7 +63,23 @@ const update = async (req, res) => {
     return res.status(200).json(product);
   } catch (err) {
     console.error(err);
-    return res.status(500).send('Internal Server Error');
+    return res.status(500).json(error500);
+  }
+};
+
+const exclude = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const product = await ProductsService.exclude(id);
+
+    if (product.length === 0) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    return res.status(204).json();
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json(error500);
   }
 };
 
@@ -70,4 +88,5 @@ module.exports = {
   find,
   create,
   update,
+  exclude,
 };
