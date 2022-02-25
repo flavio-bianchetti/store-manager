@@ -25,7 +25,27 @@ const find = async (req, res) => {
   }
 };
 
+const create = async (req, res) => {
+  const { name, quantity } = req.body;
+  try {
+    const product = await ProductsService.create({ name, quantity });
+    if (product.length === 0) {
+      return res.status(409).json({ message: 'Product already exists' });
+    }
+
+    if (!product) {
+      return res.status(402).json({ message: 'Payment Required' });
+    }
+
+    return res.status(201).json(product);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send('Internal Server Error');
+  }
+};
+
 module.exports = {
   getAll,
   find,
+  create,
 };
