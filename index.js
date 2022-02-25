@@ -35,6 +35,13 @@ app.post(
   ProductsController.create,
 );
 
+app.put(
+  '/products/:id',
+  nameProductValidator,
+  quantityProductsValidator,
+  ProductsController.update,
+);
+
 app.post('/sales', productIdSalesValidator, quantitySalesValidator);
 
 app.listen(process.env.PORT, () => {
