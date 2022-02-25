@@ -42,6 +42,11 @@ app.put(
   ProductsController.update,
 );
 
+app.delete(
+  '/products/:id',
+  ProductsController.exclude,
+);
+
 app.post('/sales', productIdSalesValidator, quantitySalesValidator);
 
 app.listen(process.env.PORT, () => {
