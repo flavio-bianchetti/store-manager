@@ -44,8 +44,30 @@ const create = async (req, res) => {
   }
 };
 
+const update = async (req, res) => {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+  try {
+    const product = await ProductsService.update({ id, name, quantity });
+
+    if (product.length === 0) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    if (!product) {
+      return res.status(401).json({ message: 'Product exists with another "id". ' });
+    }
+
+    return res.status(200).json(product);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send('Internal Server Error');
+  }
+};
+
 module.exports = {
   getAll,
   find,
   create,
+  update,
 };
