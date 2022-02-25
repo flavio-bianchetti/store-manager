@@ -14,7 +14,8 @@ const find = async (req, res) => {
   const { id } = req.params;
   try {
     const product = await ProductsService.find(id);
-    if (product.length === 0) {
+    console.log(product);
+    if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
     return res.status(200).json(product);
