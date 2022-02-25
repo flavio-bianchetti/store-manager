@@ -13,35 +13,21 @@ const products = [
 
 const sales = [
   {
-    "id": 1,
-    "date": "2016-01-01 15:02:39",
+    "saleId": 1,
+    "date": "2021-09-09T04:54:29.000Z",
+    "productId": 1,
+    "quantity": 2
   },
   {
-    "id": 2,
-    "date": "2020-11-09 07:45:14",
-  },
+    "saleId": 1,
+    "date": "2021-09-09T04:54:54.000Z",
+    "productId": 2,
+    "quantity": 2
+  }
 ];
 
-const sales_products = [
-  {
-    "sale_id": 1,
-    "product_id": 1,
-    "quantity": 2,
-  },
-  {
-    "sale_id": 1,
-    "product_id": 2,
-    "quantity": 4,
-  },
-  {
-    "sale_id": 2,
-    "product_id": 3,
-    "quantity": 8,
-  },
-];
 
 module.exports = {
   products,
   sales,
-  sales_products,
 };
