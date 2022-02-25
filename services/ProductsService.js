@@ -30,7 +30,7 @@ const create = async ({ name, quantity }) => {
 const update = async ({ id, name, quantity }) => {
   const findProductById = await find(id);
   const findProductByName = await findByName(name);
-  console.log(findProductByName, findProductById);
+
   if (!findProductById) return [];
 
   if (findProductByName.length !== 0
