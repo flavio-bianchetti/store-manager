@@ -41,3 +41,37 @@ describe('Acessando o caminho "/products/:id" ...', () => {
     connection.execute.restore();
   });
 });
+
+describe('Ao solicitar o cadastro de um novo produto,', () => {
+  describe('insere o produto no banco de dados,', () => {
+
+    before( async () => {
+      const execute = [{ insertId: 1 }];
+      sinon.stub(connection, 'execute').resolves(execute);
+    });
+
+    after( async () => {
+      connection.execute.restore();
+    });
+
+    it('retorna um objeto.', async () => {
+      const response = await ProductsModel.create(products[0]);
+      expect(response).to.be.an('object');
+    });
+
+    it('retorna o id do novo produto inserido.', async () => {
+      const response = await ProductsModel.create(products[0]);
+      expect(response.insertId).to.be.equal(1);
+    });
+  });
+
+  describe('', () => {
+    it('', async () => {
+
+    });
+
+    it('', async () => {
+      
+    });
+  });
+});
