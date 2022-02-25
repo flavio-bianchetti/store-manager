@@ -141,7 +141,7 @@ describe('Ao fazer um GET no caminho "/products/:id"', () => {
       request.params = {id: 2};
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
-      sinon.stub(ProductsService, 'find').resolves([]);
+      sinon.stub(ProductsService, 'find').resolves(false);
     });
 
     after( async () => {

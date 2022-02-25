@@ -30,12 +30,12 @@ describe('Acessando o caminho "/products/:id" ...', () => {
   it('não retorna produto se o "id" não for encontrado e ...', async () => {
     sinon.stub(connection, 'execute').resolves([[]]);
     const response =  await ProductsModel.find(2);
-    expect(response).to.be.empty;
+    expect(response).to.be.an('undefined');
     connection.execute.restore();
   });
 
   it('retornar um produto se o "id" for encontrado.', async () => {
-    sinon.stub(connection, 'execute').resolves([products[0]]);
+    sinon.stub(connection, 'execute').resolves([[products[0]]]);
     const response =  await ProductsModel.find(1);
     expect(response).to.be.not.empty;
     connection.execute.restore();
