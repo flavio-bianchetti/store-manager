@@ -68,9 +68,102 @@ describe('Acessando o caminho "/products/:id", ...', () => {
       expect([response]).to.be.length(1);
     });
 
-    it('o produto corretor para o "id" informado.', async () => {
+    it('o produto correto para o "id" informado.', async () => {
       const response =  await ProductsService.find(1);
       expect(response).to.be.eql(productItem);
+    });
+  });
+});
+
+describe('Ao solicitar o cadastro de um novo produto', () => {
+
+  before( async () => {
+    sinon.stub(ProductsModel, 'find').resolves(products[0]);
+  });
+
+  after( async () => {
+    ProductsModel.find.restore();
+  });
+
+  describe(' e ele já está cadastrado.', () => {
+    it('retorna um array com o produto.', async () => {
+      const response =  await ProductsService.find(1);
+      expect(response).to.be.not.empty;
+    });
+  });
+});
+
+describe('Ao solicitar o cadastro de um novo produto', () => {
+
+  before( async () => {
+    sinon.stub(ProductsModel, 'find').resolves([]);
+  });
+
+  after( async () => {
+    ProductsModel.find.restore();
+  });
+
+  describe(' e ele não está cadastrado.', () => {
+    it('retorna um array vazio.', async () => {
+      const response =  await ProductsService.find(1);
+      expect(response).to.be.empty;
+    });
+  });
+});
+
+describe('Ao solicitar o cadastro de um novo produto', () => {
+  const payload = {};
+
+  before( async () => {
+    sinon.stub(ProductsModel, 'create').resolves(false);
+  });
+
+  after( async () => {
+    ProductsModel.create.restore();
+  });
+
+  describe(' e o payload é inválido.', () => {
+    it('retorna um boleano.', async () => {
+      const response =  await ProductsService.create(payload);
+      expect(response).to.be.a('boolean');
+    });
+
+    it('o boleano é "false".', async () => {
+      const response =  await ProductsService.create(payload);
+      expect(response).to.be.false;
+    });
+  });
+});
+
+describe('Ao solicitar o cadastro de um novo produto', () => {
+  const payload = {
+    name: 'Luva do Thanos',
+    quantity: 10,
+  };
+
+  before( async () => {
+    const idRetorned = 1;
+    sinon.stub(ProductsModel, 'create').returns({
+      id: idRetorned,
+      name: payload.name,
+      quantity: payload.quantity,
+    });
+  });
+
+  after( async () => {
+    ProductsModel.create.restore();
+  });
+
+  describe(' é cadastrado com sucesso.', () => {
+    it('retorna um objeto.', async () => {
+      const response =  await ProductsService.create(payload);
+      expect(response).to.be.an('object');
+    });
+
+    it('o objeto possui o novo "id".', async () => {
+      const response =  await ProductsService.create(payload);
+      console.log(response);
+      expect(response).to.have.property('id');
     });
   });
 });
