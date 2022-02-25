@@ -44,6 +44,10 @@ describe('Acessando o caminho "/products/:id" ...', () => {
 
 describe('Ao solicitar o cadastro de um novo produto,', () => {
   describe('insere o produto no banco de dados,', () => {
+    const payload = {
+      name: 'Produto Teste',
+      quantity: 10,
+    };
 
     before( async () => {
       const execute = [{ insertId: 1 }];
@@ -55,12 +59,12 @@ describe('Ao solicitar o cadastro de um novo produto,', () => {
     });
 
     it('retorna um objeto.', async () => {
-      const response = await ProductsModel.create(products[0]);
+      const response = await ProductsModel.create(payload);
       expect(response).to.be.an('object');
     });
 
     it('retorna o id do novo produto inserido.', async () => {
-      const response = await ProductsModel.create(products[0]);
+      const response = await ProductsModel.create(payload);
       expect(response.insertId).to.be.equal(1);
     });
   });
