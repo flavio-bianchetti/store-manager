@@ -15,7 +15,7 @@ const nameProductValidator = async (req, res, next) => {
 
 const quantityProductsValidator = async (req, res, next) => {
   const { quantity } = req.body;
-  if (!quantity) {
+  if (!quantity && quantity !== 0) {
     return res.status(400)
       .json({ message: '"quantity" is required' }); 
   }
