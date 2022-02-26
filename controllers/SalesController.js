@@ -45,8 +45,28 @@ const create = async (req, res) => {
   }
 };
 
+const update = async (req, res) => {
+  const { id } = req.params;
+  const [arraySale] = req.body;
+  const { productId, quantity } = arraySale;
+  try {
+    const sale = await SalesService
+    .update({ id, productId, quantity });
+
+    if (sale.length === 0) {
+      return res.status(402).json({ message: 'Payment required' });
+    }
+
+    return res.status(200).json(sale);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json(error500);
+  }
+};
+
 module.exports = {
   getAll,
   find,
   create,
+  update,
 };
