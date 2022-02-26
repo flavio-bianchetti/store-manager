@@ -64,9 +64,27 @@ const update = async (req, res) => {
   }
 };
 
+const exclude = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const sale = await SalesService.exclude(id);
+    console.log(sale);
+
+    if (!sale) {
+      return res.status(404).json({ message: 'Sale not found' });
+    }
+
+    return res.status(204).json();
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json(error500);
+  }
+};
+
 module.exports = {
   getAll,
   find,
   create,
   update,
+  exclude,
 };
