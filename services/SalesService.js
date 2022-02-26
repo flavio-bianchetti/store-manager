@@ -39,9 +39,22 @@ const update = async (sale) => {
   return result;
 };
 
+const exclude = async (id) => {
+  const sale = await SalesModel.find(Number(id));
+  console.log(sale);
+  if (sale.length === 0) return false;
+
+  const result = await SalesModel.exclude(id);
+
+  if (!result) return false;
+
+  return result;
+};
+
 module.exports = {
   getAll,
   find,
   create,
   update,
+  exclude,
 };
