@@ -72,9 +72,22 @@ const update = async ({ saleId, productId, quantity }) => {
   };
 };
 
+const exclude = async (id) => {
+  const [s] = await connection.execute(
+    'DELETE FROM StoreManager.sales WHERE '
+    + 'id = ?;',
+    [id],
+  );
+
+  if (s.affectedRows === 0) return false;
+
+  return s.affectedRows;
+};
+
 module.exports = {
   getAll,
   find,
   create,
   update,
+  exclude,
 };
