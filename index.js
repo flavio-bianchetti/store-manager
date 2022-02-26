@@ -49,7 +49,16 @@ app.delete(
 
 app.post(
   '/sales',
+  productIdSalesValidator,
+  quantitySalesValidator,
   SalesController.create,
+);
+
+app.put(
+  '/sales/:id',
+  productIdSalesValidator,
+  quantitySalesValidator,
+  SalesController.update,
 );
 
 app.post('/sales', productIdSalesValidator, quantitySalesValidator);
