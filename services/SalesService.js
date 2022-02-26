@@ -22,8 +22,26 @@ const create = async (arraySales) => {
   return result;
 };
 
+const update = async (sale) => {
+  // verificar se há quantidade suficiente de produtos.
+
+  const result = await SalesModel
+    .update({
+      saleId: Number(sale.id),
+      productId: Number(sale.productId),
+      quantity: Number(sale.quantity),
+    });
+
+  if (result.affectedRows === 0) return false;
+
+  // fazer update da quantidade dos produtos.
+
+  return result;
+};
+
 module.exports = {
   getAll,
   find,
   create,
+  update,
 };
