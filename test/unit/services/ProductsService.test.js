@@ -23,125 +23,116 @@ const productItem = {
   "quantity": 10
 };
 
-describe('Acessando o caminho "/products"...', () => {
-  before( async () => {
+describe('Acessando o caminho "/products" retorna', () => {
+  beforeEach(() => {
     sinon.stub(ProductsModel, 'getAll').resolves(products);
   });
 
-  after( async () => {
-    ProductsModel.getAll.restore();
+  afterEach( async () => {
+    await ProductsModel.getAll.restore();
   });
 
-  describe('renorna ...', () => {
-    it('a quantidade correta de produtos, ...', async () => {
-      const response = await ProductsService.getAll();
-      expect(response).to.be.length(2);
-    });
-
-    it('um array com os produtos corretos e ...', async () => {
-      const response = await ProductsService.getAll();
-      expect(response[0].name).to.be.eql(productsList[0].name);
-      expect(response[1].name).to.be.eql(productsList[1].name);
-    });
-
-    it('ordenados por "id" de forma crescente.', async () => {
-        const response = await ProductsService.getAll();
-        expect(response[0].id).to.be.eql(productsList[0].id);
-        expect(response[1].id).to.be.eql(productsList[1].id);
-      });
+  it('a quantidade correta de produtos.', async () => {
+    const response = await ProductsService.getAll();
+    expect(response).to.be.length(2);
   });
+
+  it('um array com os produtos corretos.', async () => {
+    const response = await ProductsService.getAll();
+    expect(response[0].name).to.be.eql(productsList[0].name);
+    expect(response[1].name).to.be.eql(productsList[1].name);
+  });
+
+  it('ordenados por "id" de forma crescente.', async () => {
+      const response = await ProductsService.getAll();
+      expect(response[0].id).to.be.eql(productsList[0].id);
+      expect(response[1].id).to.be.eql(productsList[1].id);
+    });
 });
 
-describe('Acessando o caminho "/products/:id", ...', () => {
+describe('Acessando o caminho "/products/:id" retorna', () => {
 
-  before( async () => {
+  beforeEach(() => {
     sinon.stub(ProductsModel, 'find').resolves(products[0]);
   });
 
-  after( async () => {
-    ProductsModel.find.restore();
+  afterEach( async () => {
+    await ProductsModel.find.restore();
   });
 
-  describe('renorna ...', () => {
-    it('a quantidade correta de produtos e ...', async () => {
-      const response =  await ProductsService.find(1);
-      expect([response]).to.be.length(1);
-    });
+  it('a quantidade correta de produtos.', async () => {
+    const response =  await ProductsService.find(1);
+    expect([response]).to.be.length(1);
+  });
 
-    it('o produto correto para o "id" informado.', async () => {
-      const response =  await ProductsService.find(1);
-      expect(response).to.be.eql(productItem);
-    });
+  it('o produto correto para o "id" informado.', async () => {
+    const response =  await ProductsService.find(1);
+    expect(response).to.be.eql(productItem);
   });
 });
 
 describe('Ao solicitar o cadastro de um novo produto', () => {
 
-  before( async () => {
+  beforeEach(() => {
     sinon.stub(ProductsModel, 'find').resolves(products[0]);
   });
 
-  after( async () => {
-    ProductsModel.find.restore();
+  afterEach( async () => {
+    await ProductsModel.find.restore();
   });
 
-  describe(' e ele já está cadastrado.', () => {
-    it('retorna um array com o produto.', async () => {
-      const response =  await ProductsService.find(1);
-      expect(response).to.be.not.empty;
-    });
+  it('retorna um array com o produto.', async () => {
+    const response =  await ProductsService.find(1);
+    expect(response).to.be.not.empty;
   });
 });
 
 describe('Ao solicitar o cadastro de um novo produto', () => {
 
-  before( async () => {
+  beforeEach(() => {
     sinon.stub(ProductsModel, 'find').resolves([]);
   });
 
-  after( async () => {
-    ProductsModel.find.restore();
+  afterEach( async () => {
+    await ProductsModel.find.restore();
   });
 
-  describe(' e ele não está cadastrado.', () => {
-    it('retorna um array vazio.', async () => {
-      const response =  await ProductsService.find(1);
-      expect(response).to.be.empty;
-    });
+  it('retorna um array vazio.', async () => {
+    const response =  await ProductsService.find(1);
+    expect(response).to.be.empty;
   });
 });
 
 describe('Ao solicitar o cadastro de um novo produto', () => {
   const payload = {};
 
-  before( async () => {
+  beforeEach(() => {
     sinon.stub(ProductsModel, 'create').resolves(false);
   });
 
-  after( async () => {
-    ProductsModel.create.restore();
+  afterEach( async () => {
+    await ProductsModel.create.restore();
   });
 
-  describe(' e o payload é inválido.', () => {
-    it('retorna um boleano.', async () => {
-      const response =  await ProductsService.create(payload);
-      expect(response).to.be.a('boolean');
-    });
+  it('retorna um boleano.', async () => {
+    const response =  await ProductsService.create(payload);
+    expect(response).to.be.a('boolean');
+  });
 
-    it('o boleano é "false".', async () => {
-      const response =  await ProductsService.create(payload);
-      expect(response).to.be.false;
-    });
+  it('o boleano é "false".', async () => {
+    const response =  await ProductsService.create(payload);
+    expect(response).to.be.false;
   });
 });
 
+// há um erro abaixo, no teste ou no código, que não está parando o teste. Verificar.
 describe('Ao solicitar o cadastro de um novo produto', () => {
   const payload = {
     name: 'Luva do Thanos',
     quantity: 10,
   };
 
-  before( async () => {
+  beforeEach( async () => {
     const idRetorned = 1;
     sinon.stub(ProductsModel, 'create').returns({
       id: idRetorned,
@@ -150,20 +141,17 @@ describe('Ao solicitar o cadastro de um novo produto', () => {
     });
   });
 
-  after( async () => {
-    ProductsModel.create.restore();
+  afterEach( async () => {
+    await ProductsModel.create.restore();
   });
 
-  describe(' é cadastrado com sucesso.', () => {
-    it('retorna um objeto.', async () => {
-      const response =  await ProductsService.create(payload);
-      expect(response).to.be.an('object');
-    });
+  it('retorna um objeto.', async () => {
+    const response =  await ProductsService.create(payload);
+    expect(response).to.be.an('object');
+  });
 
-    it('o objeto possui o novo "id".', async () => {
-      const response =  await ProductsService.create(payload);
-      console.log(response);
-      expect(response).to.have.property('id');
-    });
+  it('o objeto possui o novo "id".', async () => {
+    const response =  await ProductsService.create(payload);
+    expect(response).to.have.property('id');
   });
 });

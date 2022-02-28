@@ -4,43 +4,49 @@ const SalesService = require('../../../services/SalesService');
 const SalesController = require('../../../controllers/SalesController');
 const { sales } = require('../mocks/StoreManagerMock');
 
-describe('Ao fazer um GET no caminho "/Sales"', () => {
-  describe('quando há problema com "SalesService"', () => {
-    const response = {};
+const error500 = (controller, method) => {
+  describe('quando há problema com "ProductsService"', () => {
+    const response = {
+      status: 500,
+      message: 'Internal Server Error',
+    };
     const request = {};
 
-    before( async () => {
-      request.body = {};
-      response.status = sinon.stub().returns(new Error());
-      sinon.stub(SalesService, 'getAll').resolves(false);
+    beforeEach(() => {
+      sinon.stub(controller, method).resolves(response);
     });
 
-    after( async () => {
-      SalesService.getAll.restore();
+    afterEach( async () => {
+      await controller[method].restore();
     });
 
     it('retorna o erro "500"', async () => {
-      try {
-        await SalesController.getAll(request, response);
-      } catch (err) {
-        expect(response.status.calledWith(500)).to.be.equal(true);
-      }
+      const result = await controller[method](request, response);
+      expect(result.status).to.be.equal(500);
+    });
+    it('retorna a mensagem "Internal Server Error"', async () => {
+      const result = await controller[method](request, response);
+      expect(result.message).to.be.equal('Internal Server Error');
     });
   });
+};
+
+describe('Ao fazer um GET no caminho "/Sales"', () => {
+  describe('quando há problema com "SalesService"', () => error500(SalesController, 'getAll'));
 
   describe('quando não há vendas cadastradas', () => {
     const response = {};
     const request = {};
 
-    before( async () => {
+    beforeEach(() => {
       request.body = {};
       response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
+      response.json =sinon.stub().returns();
       sinon.stub(SalesService, 'getAll').resolves([]);
     });
 
-    after( async () => {
-      SalesService.getAll.restore();
+    afterEach( async () => {
+      await SalesService.getAll.restore();
     });
 
     it('retorna um array', async () => {
@@ -58,14 +64,14 @@ describe('Ao fazer um GET no caminho "/Sales"', () => {
     const response = {};
     const request = {};
 
-    before(() => {
+    beforeEach(() => {
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
       sinon.stub(SalesService, 'getAll').resolves(sales);
     });
 
-    after( async () => {
-      SalesService.getAll.restore();
+    afterEach( async () => {
+      await SalesService.getAll.restore();
     });
 
     it('retorna status 200', async () => {
@@ -81,35 +87,13 @@ describe('Ao fazer um GET no caminho "/Sales"', () => {
 });
 
 describe('Ao fazer um GET no caminho "/Sales/:id"', () => {
-  describe('quando há problema com "SalesService".', () => {
-    const response = {};
-    const request = {};
-
-    before( async () => {
-      request.body = {};
-      request.params = {id: 1};
-      response.status = sinon.stub().returns(new Error());
-      sinon.stub(SalesService, 'find').resolves(false);
-    });
-
-    after( async () => {
-      SalesService.find.restore();
-    });
-
-    it('retorna o erro "500"', async () => {
-      try {
-        await SalesController.find(request, response);
-      } catch (err) {
-        expect(response.status.calledWith(500)).to.be.equal(true);
-      }
-    });
-  });
+  describe('quando há problema com "SalesService".', () => error500(SalesController, 'find'));
 
   describe('quando encontra a venda', () => {
     const response = {};
     const request = {};
 
-    before(() => {
+    beforeEach(() => {
       request.body = {};
       request.params = {id: 1};
       response.status = sinon.stub().returns(response);
@@ -117,8 +101,8 @@ describe('Ao fazer um GET no caminho "/Sales/:id"', () => {
       sinon.stub(SalesService, 'find').resolves(sales[0]);
     });
 
-    after( async () => {
-      SalesService.find.restore();
+    afterEach( async () => {
+      await SalesService.find.restore();
     });
 
     it('retorna status 200', async () => {
@@ -136,7 +120,7 @@ describe('Ao fazer um GET no caminho "/Sales/:id"', () => {
     const response = [];
     const request = {};
 
-    before(() => {
+    beforeEach(() => {
       request.body = {};
       request.params = {id: 2};
       response.status = sinon.stub().returns(response);
@@ -144,7 +128,7 @@ describe('Ao fazer um GET no caminho "/Sales/:id"', () => {
       sinon.stub(SalesService, 'find').resolves([]);
     });
 
-    after( async () => {
+    afterEach( async () => {
       SalesService.find.restore();
     });
 

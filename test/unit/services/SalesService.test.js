@@ -7,12 +7,12 @@ const { sales } = require('../mocks/StoreManagerMock');
 
 describe('Ao acessar o caminho', () => {
   describe('GET "/sales" retorna', () => {
-    before( async () => {
+    beforeEach(() => {
       sinon.stub(SalesModel, 'getAll').resolves(sales);
     });
 
-    after( async () => {
-      SalesModel.getAll.restore();
+    afterEach( async () => {
+      await SalesModel.getAll.restore();
     });
 
     it('a quantidade correta de vendas', async () => {
@@ -34,11 +34,11 @@ describe('Ao acessar o caminho', () => {
   });
 
   describe('GET "/sales/:id" retorna', () => {
-    before( async () => {
+    beforeEach(() => {
         sinon.stub(SalesModel, 'find').resolves(sales[0]);
     });
 
-    after( async () => {
+    afterEach( async () => {
         SalesModel.find.restore();
     });
 

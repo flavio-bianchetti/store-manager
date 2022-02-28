@@ -1,45 +1,51 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
-const ProductsService = require('../../../services/ProductsService');
 const ProductsController = require('../../../controllers/ProductsController');
+const ProductsService = require('../../../services/ProductsService');
 const { products } = require('../mocks/StoreManagerMock');
 
-describe('Ao fazer um GET no caminho "/products"', () => {
+const error500 = (controller, method) => {
   describe('quando há problema com "ProductsService"', () => {
-    const response = {};
+    const response = {
+      status: 500,
+      message: 'Internal Server Error',
+    };
     const request = {};
 
-    before( async () => {
-      request.body = {};
-      response.status = sinon.stub().returns(new Error());
-      sinon.stub(ProductsService, 'getAll').resolves(false);
+    beforeEach(() => {
+      sinon.stub(controller, method).resolves(response);
     });
 
-    after( async () => {
-      ProductsService.getAll.restore();
+    afterEach( async () => {
+      await controller[method].restore();
     });
 
     it('retorna o erro "500"', async () => {
-      try {
-        await ProductsController.getAll(request, response);
-      } catch (err) {
-        expect(response.status.calledWith(500)).to.be.equal(true);
-      }
+      const result = await controller[method](request, response);
+      expect(result.status).to.be.equal(500);
+    });
+    it('retorna a mensagem "Internal Server Error"', async () => {
+      const result = await controller[method](request, response);
+      expect(result.message).to.be.equal('Internal Server Error');
     });
   });
+};
+
+describe('Ao fazer um GET no caminho "/products"', () => {
+  describe('quando há problema com "ProductsService"', () => error500(ProductsController, 'getAll'));
 
   describe('quando não há produtos cadastrados', () => {
     const response = {};
     const request = {};
 
-    before( async () => {
+    beforeEach(() => {
       request.body = {};
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
       sinon.stub(ProductsService, 'getAll').resolves([]);
     });
 
-    after( async () => {
+    afterEach(() => {
       ProductsService.getAll.restore();
     });
 
@@ -58,13 +64,13 @@ describe('Ao fazer um GET no caminho "/products"', () => {
     const response = {};
     const request = {};
 
-    before(() => {
+    beforeEach(() => {
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
       sinon.stub(ProductsService, 'getAll').resolves(products);
     });
 
-    after( async () => {
+    afterEach(() => {
       ProductsService.getAll.restore();
     });
 
@@ -72,7 +78,6 @@ describe('Ao fazer um GET no caminho "/products"', () => {
       await ProductsController.getAll(request, response);
       expect(response.status.calledWith(200)).to.be.equal(true);
     });
-
     it('retorna um array não vazio', async () => {
       await ProductsController.getAll(request, response);
       expect(response.json.calledWith(sinon.match.array)).to.be.equal(true);
@@ -81,35 +86,14 @@ describe('Ao fazer um GET no caminho "/products"', () => {
 });
 
 describe('Ao fazer um GET no caminho "/products/:id"', () => {
-  describe('quando há problema com "ProductsService".', () => {
-    const response = {};
-    const request = {};
-
-    before( async () => {
-      request.body = {};
-      request.params = {id: 1};
-      response.status = sinon.stub().returns(new Error());
-      sinon.stub(ProductsService, 'find').resolves(false);
-    });
-
-    after( async () => {
-      ProductsService.find.restore();
-    });
-
-    it('retorna o erro "500"', async () => {
-      try {
-        await ProductsController.find(request, response);
-      } catch (err) {
-        expect(response.status.calledWith(500)).to.be.equal(true);
-      }
-    });
-  });
+  
+  describe('quando há problema com "ProductsService"', () =>  error500(ProductsController, 'find'));
 
   describe('quando encontra o produto', () => {
     const response = {};
     const request = {};
 
-    before(() => {
+    beforeEach(() => {
       request.body = {};
       request.params = {id: 1};
       response.status = sinon.stub().returns(response);
@@ -117,7 +101,7 @@ describe('Ao fazer um GET no caminho "/products/:id"', () => {
       sinon.stub(ProductsService, 'find').resolves(products[0]);
     });
 
-    after( async () => {
+    afterEach(() => {
       ProductsService.find.restore();
     });
 
@@ -136,7 +120,7 @@ describe('Ao fazer um GET no caminho "/products/:id"', () => {
     const response = [];
     const request = {};
 
-    before(() => {
+    beforeEach(() => {
       request.body = {};
       request.params = {id: 2};
       response.status = sinon.stub().returns(response);
@@ -144,7 +128,7 @@ describe('Ao fazer um GET no caminho "/products/:id"', () => {
       sinon.stub(ProductsService, 'find').resolves(false);
     });
 
-    after( async () => {
+    afterEach(() => {
       ProductsService.find.restore();
     });
 
