@@ -60,11 +60,14 @@ const create = async (arraySales) => {
   if (result.length === 0) return undefined;
 
   const resultSales = await SalesModel.create(arraySales);
+
   if (resultSales.length === 0) return [];
 
   // em caso de erro abaixo, tem que fazer o rollback acima.
   // Não implementado.
-  if (updateQuantityProducts(arraySales) === false) return false;
+  const updateSales = await updateQuantityProducts(arraySales);
+
+  if (updateSales === false) return false;
 
   return resultSales;
 };
