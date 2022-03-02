@@ -41,3 +41,94 @@ describe('Ao acessar o caminho', () => {
     });
   });
 });
+
+describe('Ao acessar o caminho', () => {
+  describe('POST "/sales" retorna', () => {
+    const saleId = 1;
+    const result = {
+      insertId: 1,
+    };
+    const arraySales = [
+      {
+        productId: 2,
+        quantity: 50,
+      },
+    ];
+    beforeEach(() => {
+        sinon.stub(connection, 'execute').resolves([result]);
+    });
+
+    afterEach( async () => {
+      await connection.execute.restore();
+    });
+
+    it('um objeto.', async () => {
+        const response = await SalesModel.create(arraySales);
+        expect(response).to.be.an('object');
+    });
+
+    it('com o "id" da nova venda.', async () => {
+        const response = await SalesModel.create(arraySales);
+        expect(response.id).to.be.equal(saleId);
+    });
+  });
+});
+
+describe('Ao acessar o caminho', () => {
+  describe('PUT "/sales" retorna', () => {
+    const saleId = 2;
+    const result = {
+      affectedRows: 1,
+    };
+    const sale = {
+      saleId: 2,
+      productId: 1,
+      quantity: 50,
+    };
+
+    beforeEach(() => {
+        sinon.stub(connection, 'execute').resolves([result]);
+    });
+
+    afterEach( async () => {
+      await connection.execute.restore();
+    });
+
+    it('um objeto.', async () => {
+        const response = await SalesModel.update(sale);
+        expect(response).to.be.an('object');
+    });
+
+    it('com o "id" da nova venda.', async () => {
+        const response = await SalesModel.update(sale);
+        expect(response.saleId).to.be.equal(saleId);
+    });
+  });
+});
+
+describe('Ao acessar o caminho', () => {
+  describe('DELETE "/sales" retorna', () => {
+    const id = 2;
+    const result = {
+      affectedRows: 1,
+    };
+
+    beforeEach(() => {
+        sinon.stub(connection, 'execute').resolves([result]);
+    });
+
+    afterEach( async () => {
+      await connection.execute.restore();
+    });
+
+    it('um número.', async () => {
+        const response = await SalesModel.exclude(id);
+        expect(response).to.be.a('number');
+    });
+
+    it('o número correto.', async () => {
+        const response = await SalesModel.exclude(id);
+        expect(response).to.be.equal(1);
+    });
+  });
+});

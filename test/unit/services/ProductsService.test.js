@@ -124,36 +124,3 @@ describe('Ao solicitar o cadastro de um novo produto', () => {
     expect(response).to.be.false;
   });
 });
-
-// há um erro abaixo, no teste ou no código, que não está parando o teste. Verificar.
-// describe('Ao solicitar o cadastro de um novo produto', () => {
-//   const payload = {
-//     name: 'Luva do Thanos',
-//     quantity: 10,
-//   };
-
-//   beforeEach(() => {
-//     const idRetorned = 1;
-//     sinon.stub(ProductsModel, 'create').resolves({
-//       id: idRetorned,
-//       name: payload.name,
-//       quantity: payload.quantity,
-//     });
-//   });
-
-//   afterEach( async () => {
-//     await ProductsModel.create.restore();
-//   });
-
-//   it('retorna um objeto.', async () => {
-//     const response =  await ProductsService.create(payload);
-//     console.log(response);
-//     expect(response).to.be.an('object');
-//   });
-
-//   it('o objeto possui o novo "id".', async () => {
-//     const response =  await ProductsService.create(payload);
-//     console.log(response);
-//     expect(response).to.have.property('id');
-//   });
-// });
