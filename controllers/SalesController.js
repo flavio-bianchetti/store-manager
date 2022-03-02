@@ -33,9 +33,17 @@ const create = async (req, res) => {
   const arraySales = req.body;
   try {
     const sale = await SalesService.create(arraySales);
+    
+    if (sale === undefined) {
+      return res.status(422).json({ message: 'Such amount is not permitted to sell' });
+    }
+    
+    if (sale === []) {
+      return res.status(400).json({ message: 'Error in create sales method' });
+    }
 
-    if (sale.length === 0) {
-      return res.status(402).json({ message: 'Payment required' });
+    if (sale === false) {
+      return res.status(400).json({ message: 'Error in update quantity products method' });
     }
 
     return res.status(201).json(sale);
@@ -50,11 +58,16 @@ const update = async (req, res) => {
   const [arraySale] = req.body;
   const { productId, quantity } = arraySale;
   try {
-    const sale = await SalesService
-    .update({ id, productId, quantity });
+    const sale = await SalesService.update({ id, productId, quantity });
 
-    if (sale.length === 0) {
-      return res.status(402).json({ message: 'Payment required' });
+    if (sale === undefined) {
+      return res.status(422).json({ message: 'Such amount is not permitted to sell' });
+    }
+
+    if (sale === []) return res.status(404).json({ message: 'Sale not found' });
+
+    if (sale === false) {
+      return res.status(400).json({ message: 'Error in update quantity products method' });
     }
 
     return res.status(200).json(sale);
@@ -68,10 +81,17 @@ const exclude = async (req, res) => {
   const { id } = req.params;
   try {
     const sale = await SalesService.exclude(id);
-    console.log(sale);
 
-    if (!sale) {
+    if (sale === undefined) {
       return res.status(404).json({ message: 'Sale not found' });
+    }
+
+    if (sale === []) {
+      return res.status(400).json({ message: 'Error in update exclude method' });
+    }
+
+    if (sale === false) {
+      return res.status(400).json({ message: 'Error in exclude method' });
     }
 
     return res.status(204).json();
