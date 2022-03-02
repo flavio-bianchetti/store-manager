@@ -124,3 +124,77 @@ describe('Ao solicitar o cadastro de um novo produto', () => {
     expect(response).to.be.false;
   });
 });
+
+describe('Ao solicitar a atualização de um produto', () => {
+  
+  const payload = {
+    id: 1,
+    name: 'produto A',
+    quantity: 10,
+  };
+
+  const findResult = {
+    id: 1,
+    name: 'produto A',
+    quantity: 5,
+  }
+
+  const findByNameResult = [];
+
+  const affectedRows = 1;
+
+  beforeEach(() => {
+    sinon.stub(ProductsModel, 'update').resolves({ affectedRows });
+    sinon.stub(ProductsModel, 'find').resolves(findResult);
+    sinon.stub(ProductsModel, 'findByName').resolves(findByNameResult);
+  });
+
+  afterEach( async () => {
+    await ProductsModel.update.restore();
+    await ProductsModel.find.restore();
+    await ProductsModel.findByName.restore();
+  });
+
+  it('retorna um objeto.', async () => {
+    const response =  await ProductsService.update(payload);
+    expect(response).to.be.an('object');
+  });
+
+  it('o objeto possui a propriedade "id".', async () => {
+    const response =  await ProductsService.update(payload);
+    expect(response).to.have.property('id');
+  });
+});
+
+describe('Ao solicitar excluir um produto', () => {
+  
+  const id = 1;
+
+  const findResult = {
+    id: 1,
+    name: 'produto A',
+    quantity: 5,
+  }
+
+  const excludeResult = 1;
+
+  beforeEach(() => {
+    sinon.stub(ProductsModel, 'exclude').resolves(excludeResult);
+    sinon.stub(ProductsModel, 'find').resolves(findResult);
+  });
+
+  afterEach( async () => {
+    await ProductsModel.exclude.restore();
+    await ProductsModel.find.restore();
+  });
+
+  it('retorna um número.', async () => {
+    const response =  await ProductsService.exclude(id);
+    expect(response).to.be.an('number');
+  });
+
+  it('o número possui o valor correto.', async () => {
+    const response =  await ProductsService.exclude(id);
+    expect(response).to.be.equal(1);
+  });
+});

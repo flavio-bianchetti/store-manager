@@ -145,7 +145,7 @@ describe('Ao fazer um GET no caminho "/Sales/:id"', () => {
 });
 
 describe('Ao fazer um POST no caminho "/Sales"', () => {
-  describe('quando há problema com "SalesService".', () => error500(SalesController, 'find'));
+  describe('quando há problema com "SalesService".', () => error500(SalesController, 'create'));
 
   describe('quando salva a venda com sucesso', () => {
     const response = {};
@@ -258,7 +258,7 @@ describe('Ao fazer um POST no caminho "/Sales"', () => {
 });
 
 describe('Ao fazer um PUT no caminho "/Sales/id"', () => {
-  describe('quando há problema com "SalesService".', () => error500(SalesController, 'find'));
+  describe('quando há problema com "SalesService".', () => error500(SalesController, 'update'));
 
   describe('quando atualiza a venda com sucesso', () => {
     const response = {};
@@ -383,7 +383,7 @@ describe('Ao fazer um PUT no caminho "/Sales/id"', () => {
 });
 
 describe('Ao fazer um DELETE no caminho "/Sales/id"', () => {
-  describe('quando há problema com "SalesService".', () => error500(SalesController, 'find'));
+  describe('quando há problema com "SalesService".', () => error500(SalesController, 'exclude'));
 
   describe('quando apaga a venda com sucesso', () => {
     const response = {};

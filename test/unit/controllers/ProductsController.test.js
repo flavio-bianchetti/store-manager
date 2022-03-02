@@ -143,3 +143,125 @@ describe('Ao fazer um GET no caminho "/products/:id"', () => {
     });
   });
 });
+
+describe('Ao fazer um POST no caminho "/products"', () => {
+  
+  describe('quando há problema com "ProductsService"', () =>  error500(ProductsController, 'create'));
+
+  describe('quando salva o produto com sucesso', () => {
+    const response = {};
+    const request = {};
+
+    beforeEach(() => {
+      request.body = {
+        name: 'Product B',
+        quantity: 50,
+      };
+
+      const createResult = {
+        id: 2,
+        name: 'Product B',
+        quantity: 50,
+      };
+
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns();
+      sinon.stub(ProductsService, 'create').resolves(createResult);
+    });
+
+    afterEach(() => {
+      ProductsService.create.restore();
+    });
+
+    it('retorna status 201', async () => {
+      await ProductsController.create(request, response);
+      expect(response.status.calledWith(201)).to.be.equal(true);
+    });
+
+    it('retorna um objeto não vazio', async () => {
+      await ProductsController.create(request, response);
+      expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
+    });
+  });
+});
+
+describe('Ao fazer um PUT no caminho "/products/id"', () => {
+  
+  describe('quando há problema com "ProductsService"', () =>  error500(ProductsController, 'update'));
+
+  describe('quando atualiza o produto com sucesso', () => {
+    const response = {};
+    const request = {};
+
+    beforeEach(() => {
+      request.params = {
+        id: 2,
+      };
+
+      request.body = {
+        name: 'Product B',
+        quantity: 50,
+      };
+
+      const updateResult = {
+        id: 2,
+        name: 'Product B',
+        quantity: 55,
+      };
+
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns();
+      sinon.stub(ProductsService, 'update').resolves(updateResult);
+    });
+
+    afterEach(() => {
+      ProductsService.update.restore();
+    });
+
+    it('retorna status 200', async () => {
+      await ProductsController.update(request, response);
+      expect(response.status.calledWith(200)).to.be.equal(true);
+    });
+
+    it('retorna um objeto não vazio', async () => {
+      await ProductsController.update(request, response);
+      expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
+    });
+  });
+});
+
+describe('Ao fazer um DELETE no caminho "/products/id"', () => {
+  
+  describe('quando há problema com "ProductsService"', () =>  error500(ProductsController, 'exclude'));
+
+  describe('quando remove o produto com sucesso', () => {
+    const response = {};
+    const request = {};
+
+    beforeEach(() => {
+      request.params = {
+        id: 2,
+      };
+
+      const excludeResult = 1;
+
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns();
+      sinon.stub(ProductsService, 'exclude').resolves(excludeResult);
+    });
+
+    afterEach(() => {
+      ProductsService.exclude.restore();
+    });
+
+    it('retorna status 204', async () => {
+      await ProductsController.exclude(request, response);
+      expect(response.status.calledWith(204)).to.be.equal(true);
+    });
+
+    it('não retorna nenhuma mensagem.', async () => {
+      await ProductsController.exclude(request, response);
+      expect(response.json.calledWith()).to.be.equal(true);
+    });
+  });
+});
